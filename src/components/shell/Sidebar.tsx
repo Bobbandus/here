@@ -3,7 +3,7 @@ import { APP_VIEWS } from '../../state/views';
 import { Icon } from '../ui/Icon';
 
 const tooltip =
-  'glass micro pointer-events-none absolute left-full top-1/2 z-40 ml-2 -translate-y-1/2 whitespace-nowrap rounded-[6px] px-2.5 py-1.5 text-text opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100';
+  'glass micro pointer-events-none absolute left-full top-1/2 z-40 ml-2 hidden -translate-y-1/2 whitespace-nowrap rounded-[6px] px-2.5 py-1.5 text-text opacity-0 transition-opacity duration-150 sm:block group-hover:opacity-100 group-focus-visible:opacity-100';
 
 export function Sidebar() {
   const { state, dispatch } = useApp();
@@ -11,7 +11,7 @@ export function Sidebar() {
   const items = APP_VIEWS[state.app];
 
   return (
-    <nav aria-label="Vyer" className="flex w-[72px] shrink-0 flex-col items-center border-r border-line bg-surface">
+    <nav aria-label="Vyer" className="flex w-[52px] shrink-0 flex-col items-center border-r border-line bg-surface sm:w-[72px]">
       <button
         type="button"
         aria-label="Till startsidan"

@@ -29,13 +29,13 @@ export function SceneView() {
 
   return (
     <div className="relative flex h-full flex-col">
-      <div className="flex h-16 shrink-0 items-center gap-4 border-b border-line px-6">
+      <div className="flex h-auto min-h-16 shrink-0 flex-wrap items-center gap-3 border-b border-line px-4 py-3 sm:h-16 sm:gap-4 sm:px-6 sm:py-0">
         <MonoLabel eyebrow>Scen</MonoLabel>
         <Button variant="quiet" aria-label="Föregående scen" onClick={() => select(index - 1)}>
           <Icon name="chevronLeft" size={14} />
         </Button>
         <select
-          className="field w-[380px] font-mono text-[12.5px]"
+          className="field w-full min-w-0 flex-1 font-mono text-[12.5px] sm:w-[380px] sm:flex-none"
           aria-label="Välj scen"
           value={scene.scene_id}
           onChange={(e) => dispatch({ type: 'SELECT_SCENE', sceneId: e.target.value })}
@@ -52,7 +52,7 @@ export function SceneView() {
         <span className="font-mono text-[0.68rem] text-muted">
           {index + 1}/{scenes.length} · {formatEighths(scene.page_length)} S
         </span>
-        <span className="ml-auto flex gap-3">
+        <span className="flex gap-3 sm:ml-auto">
           <Button variant="ghost" onClick={() => goToScene(scene.scene_id, 'shots')}>
             Shotlista →
           </Button>
@@ -64,9 +64,9 @@ export function SceneView() {
         </span>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-[55fr_45fr]">
-        <div className="min-h-0 overflow-y-auto border-r border-line bg-ink p-8">
-          <div className="mx-auto max-w-[780px] bg-paper px-16 py-14 shadow-[0_0_0_1px_rgba(0,0,0,0.5)]">
+      <div className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto md:grid-cols-[55fr_45fr] md:overflow-hidden">
+        <div className="min-h-0 overflow-y-auto border-b border-line bg-ink p-4 md:border-b-0 md:border-r md:p-8">
+          <div className="mx-auto max-w-[780px] bg-paper px-5 py-8 shadow-[0_0_0_1px_rgba(0,0,0,0.5)] sm:px-10 md:px-16 md:py-14">
             {lines.length > 0 ? (
               <HighlightLayer lines={lines} sceneNumbers={{ [lines[0].index]: String(index + 1) }} />
             ) : (
