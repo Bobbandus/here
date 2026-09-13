@@ -54,7 +54,12 @@ function measureOffsetTop(ta: HTMLTextAreaElement, offset: number): number {
  * (desktop, `ScriptEditor`), men är garanterat läsbar och korrekt på vilken telefon
  * som helst — ingen risk för överlappande text.
  */
-export function MobileWriteView() {
+interface MobileWriteViewProps {
+  /** Åsidosätter bakåtpilens beteende (annars: gå till startsidan). Används av /mobile. */
+  onBack?: () => void;
+}
+
+export function MobileWriteView({ onBack }: MobileWriteViewProps = {}) {
   const { state, derived, dispatch } = useApp();
   const taRef = useRef<HTMLTextAreaElement>(null);
   const [caret, setCaret] = useState(0);
@@ -99,7 +104,7 @@ export function MobileWriteView() {
       <div className="flex h-14 shrink-0 items-center gap-2 border-b border-line px-3">
         <button
           type="button"
-          onClick={() => dispatch({ type: 'SET_APP', app: 'home' })}
+          onClick={onBack ?? (() => dispatch({ type: 'SET_APP', app: 'home' }))}
           aria-label="Till startsidan"
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-btn text-muted hover:bg-raised hover:text-text"
         >
@@ -138,19 +143,26 @@ export function MobileWriteView() {
         </div>
       )}
 
-      <textarea
-        ref={taRef}
-        className="min-h-0 flex-1 resize-none bg-paper px-5 py-6 font-script text-[15px] leading-[26px] text-[#181818] outline-none"
-        value={state.script}
-        onChange={(e) => onChange(e.target.value)}
-        onSelect={syncCaret}
-        onKeyUp={syncCaret}
-        onClick={syncCaret}
-        spellCheck={false}
-        autoCapitalize="off"
-        autoCorrect="off"
-        aria-label="Manus"
-      />
+      {/* iOS Safari sizer inte alltid en <textarea> korrekt som direkt flex-item
+          (flex-1/min-h-0 räcker inte för ersatta element i alla WebKit-versioner —
+          resultatet blev ett halvt svart fönster under texten). En relativ wrapper
+          som faktiskt får sin höjd av flexboxen, med textarean absolut positionerad
+          inuti (100% bredd/höjd), kringgår det helt. */}
+      <div className="relative min-h-0 flex-1">
+        <textarea
+          ref={taRef}
+          className="absolute inset-0 h-full w-full resize-none bg-paper px-5 py-6 font-script text-[15px] leading-[26px] text-[#181818] outline-none"
+          value={state.script}
+          onChange={(e) => onChange(e.target.value)}
+          onSelect={syncCaret}
+          onKeyUp={syncCaret}
+          onClick={syncCaret}
+          spellCheck={false}
+          autoCapitalize="off"
+          autoCorrect="off"
+          aria-label="Manus"
+        />
+      </div>
 
       <div className="flex h-9 shrink-0 items-center justify-center gap-3 border-t border-line bg-surface px-3 font-mono text-[0.62rem] uppercase tracking-[0.06em] text-muted">
         <span>{derived.scenes.length} SCENER</span>

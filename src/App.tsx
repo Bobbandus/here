@@ -22,9 +22,13 @@ import { CastingView } from './components/plan/CastingView';
 import { GearView } from './components/plan/GearView';
 import { PipelineBoard } from './components/pipeline/PipelineBoard';
 import { ClapperboardView } from './components/shoot/ClapperboardView';
+import { MobileApp } from './components/mobile/MobileApp';
+
+const onMobileRoute = window.location.pathname === '/mobile' || window.location.pathname.startsWith('/mobile/');
 
 export default function App() {
   const { state, dispatch } = useApp();
+  if (onMobileRoute) return <MobileApp />;
   const inApp = state.app !== 'home' && state.hasProject;
   const focusActive = inApp && state.view === 'write' && state.focusMode;
   const shootImmersive = inApp && state.view === 'shoot';
