@@ -47,8 +47,11 @@ export function ShotlistView() {
     dispatch({ type: 'UPDATE_SHOT', sceneId, id, patch });
 
   return (
-    <div className="relative grid h-full min-h-0 grid-cols-[300px_minmax(0,1fr)]">
-      <aside aria-label="Scener" className="flex min-h-0 flex-col border-r border-line bg-surface">
+    <div className="relative flex h-full min-h-0 flex-col md:grid md:grid-cols-[300px_minmax(0,1fr)]">
+      <aside
+        aria-label="Scener"
+        className="flex max-h-[180px] min-h-0 shrink-0 flex-col border-b border-line bg-surface md:max-h-none md:border-b-0 md:border-r"
+      >
         <div className="flex h-14 shrink-0 items-center justify-between border-b border-line px-5">
           <MonoLabel eyebrow>Scener</MonoLabel>
           <span className="font-mono text-[0.64rem] text-muted">{allShots.length} TAGN.</span>
@@ -79,8 +82,8 @@ export function ShotlistView() {
       </aside>
 
       <section aria-labelledby="shotlist-title" className="flex min-h-0 flex-col">
-        <header className="flex shrink-0 items-center gap-4 border-b border-line px-8 py-5">
-          <div className="min-w-0 flex-1">
+        <header className="flex shrink-0 flex-wrap items-center gap-4 border-b border-line px-4 py-5 sm:px-8">
+          <div className="min-w-0 flex-1 basis-full sm:basis-auto">
             <MonoLabel eyebrow>Shotlista</MonoLabel>
             <h2 id="shotlist-title" className="mt-2 flex items-baseline gap-3 font-black text-[1.7rem] leading-[1.02] tracking-[-0.03em]">
               <span className="font-mono text-[1rem] font-bold tracking-normal text-accent">{scene.scene_id}</span>
@@ -100,7 +103,7 @@ export function ShotlistView() {
           </Button>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-auto px-8 py-5">
+        <div className="min-h-0 flex-1 overflow-auto px-4 py-5 sm:px-8">
           {availableLenses.length === 0 && (
             <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-gold">
               Inga objektiv i gear-listan ännu — lägg till under{' '}
@@ -269,7 +272,7 @@ export function ShotlistView() {
           )}
         </div>
 
-        <footer className="flex h-14 shrink-0 items-center gap-6 border-t border-line bg-surface px-8 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted">
+        <footer className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-line bg-surface px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted sm:px-8">
           <span>
             Scen <span className="text-text">{shots.length}</span> tagningar ·{' '}
             <span className="text-text">{formatDuration(totalDuration(shots))}</span> ·{' '}
@@ -279,7 +282,7 @@ export function ShotlistView() {
             klara
           </span>
           {shots.length > 0 && doneCount === shots.length && <Chip tone="accentOutline">Scenen inspelad</Chip>}
-          <span className="ml-auto">
+          <span className="hidden sm:ml-auto sm:inline">
             Projekt <span className="text-text">{allShots.length}</span> tagningar i <span className="text-text">{scenesWithShots}</span> scener ·{' '}
             <span className="text-text">{formatDuration(totalDuration(allShots))}</span>
           </span>

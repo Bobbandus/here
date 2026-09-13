@@ -92,8 +92,11 @@ export function CastingView() {
   };
 
   return (
-    <div className="grid h-full min-h-0 grid-cols-[280px_minmax(0,1fr)]">
-      <aside aria-label="Karaktärer" className="flex min-h-0 flex-col border-r border-line bg-surface">
+    <div className="flex h-full min-h-0 flex-col md:grid md:grid-cols-[280px_minmax(0,1fr)]">
+      <aside
+        aria-label="Karaktärer"
+        className="flex max-h-[180px] min-h-0 shrink-0 flex-col border-b border-line bg-surface md:max-h-none md:border-b-0 md:border-r"
+      >
         <div className="flex h-14 shrink-0 items-center justify-between border-b border-line px-5">
           <MonoLabel eyebrow>Roller</MonoLabel>
           <span className="font-mono text-[0.64rem] text-muted">{characters.length}</span>

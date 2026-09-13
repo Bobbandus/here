@@ -39,7 +39,7 @@ export function TopBar() {
       </button>
       <span aria-hidden="true" className="h-6 w-px bg-line" />
       <span className="hidden max-w-[220px] shrink-0 truncate font-display font-bold sm:block">{state.project.title}</span>
-      <nav aria-label="Brödsmulor" className="min-w-0 flex-1">
+      <nav aria-label="Brödsmulor" className="hidden min-w-0 flex-1 sm:block">
         <ol className="flex min-w-0 items-center gap-2.5 font-mono text-[0.72rem] uppercase tracking-[0.06em] text-muted">
           <li className="shrink-0">{viewLabel(state.view)}</li>
           {scene && (

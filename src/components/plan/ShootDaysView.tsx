@@ -44,7 +44,7 @@ function DayForm({ onDone }: { onDone: () => void }) {
           </>
         }
       >
-        <div className="grid grid-cols-[160px_120px_1fr] gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[160px_120px_1fr]">
           <Field label="Datum">
             {(id) => (
               <input id={id} type="date" className="field font-mono" required value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
@@ -106,7 +106,7 @@ function DayCard({ day }: { day: ShootDay }) {
   const patch = (p: Partial<ShootDay>) => dispatch({ type: 'UPDATE_DAY', id: day.id, patch: p });
 
   return (
-    <article className="grid grid-cols-[150px_minmax(0,1fr)_170px] gap-6 rounded-panel border border-line bg-surface p-6">
+    <article className="grid grid-cols-1 gap-4 rounded-panel border border-line bg-surface p-6 sm:grid-cols-[150px_minmax(0,1fr)_170px] sm:gap-6">
       <div className="flex flex-col gap-2.5">
         <input
           type="date"
