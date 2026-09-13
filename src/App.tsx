@@ -93,13 +93,6 @@ export default function App() {
       <CommandPalette />
       <Toast />
       <GrainOverlay />
-
-      <div className="fixed inset-0 z-40 hidden flex-col items-center justify-center gap-3 bg-ink p-8 text-center max-[799px]:flex">
-        <span className="font-black text-[28px] tracking-[-0.03em]">
-          A<span className="text-accent">+</span>
-        </span>
-        <p className="micro text-muted">A+ är gjort för större skärmar (minst 800 px bred).</p>
-      </div>
     </div>
   );
 }

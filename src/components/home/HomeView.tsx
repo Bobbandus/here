@@ -139,15 +139,15 @@ export function HomeView() {
       >
         <Icon name="cog" size={16} />
       </button>
-      <main className="mx-auto flex max-w-[1160px] flex-col px-10 pb-20 pt-[10vh]">
+      <main className="mx-auto flex max-w-[1160px] flex-col px-5 pb-20 pt-[8vh] sm:px-10 sm:pt-[10vh]">
         <h1
           aria-label="A+"
-          className="select-none font-black text-[clamp(9rem,24vw,21rem)] leading-[0.78] tracking-[-0.06em]"
+          className="select-none font-black text-[clamp(4.5rem,24vw,21rem)] leading-[0.78] tracking-[-0.06em]"
         >
           A<span className="text-accent">+</span>
         </h1>
 
-        <section aria-label="Verktyg" className="mt-20 grid grid-cols-3 gap-8">
+        <section aria-label="Verktyg" className="mt-10 grid grid-cols-1 gap-5 sm:mt-20 sm:grid-cols-3 sm:gap-8">
           <AppTile
             app="write"
             eyebrow="Skriva"
@@ -168,8 +168,8 @@ export function HomeView() {
           />
         </section>
 
-        <section aria-labelledby="projects-title" className="mt-20">
-          <div className="flex items-end justify-between gap-4">
+        <section aria-labelledby="projects-title" className="mt-14 sm:mt-20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <MonoLabel as="h2" id="projects-title" eyebrow>
                 Projekt
@@ -189,7 +189,7 @@ export function HomeView() {
               <p className="text-muted">Skapa ett projekt för att börja skriva och planera.</p>
             </div>
           ) : (
-            <div className="mt-6 grid grid-cols-3 gap-6">
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
               {summaries.map(({ p, stats }) => (
                 <ProjectCardSmall key={p.id} p={p} stats={stats} />
               ))}
@@ -197,7 +197,7 @@ export function HomeView() {
           )}
         </section>
 
-        <footer className="mt-20 flex items-center justify-between gap-4 border-t border-line pt-6 font-mono text-[0.66rem] uppercase tracking-[0.1em] text-muted">
+        <footer className="mt-20 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 font-mono text-[0.66rem] uppercase tracking-[0.1em] text-muted">
           <span>A+ Studios · Alingsås · lokal lagring · ingen AI kopplad</span>
           <span className="flex items-center gap-2">
             {confirmReset ? (

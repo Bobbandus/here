@@ -25,7 +25,7 @@ export function TopBar() {
         : [];
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-5 border-b border-line bg-ink px-6">
+    <header className="flex h-16 shrink-0 items-center gap-2 overflow-x-auto border-b border-line bg-ink px-3 sm:gap-5 sm:px-6">
       <button
         type="button"
         onClick={() => dispatch({ type: 'SET_APP', app: 'home' })}
@@ -38,7 +38,7 @@ export function TopBar() {
         <span className="font-mono text-[10px] font-bold tracking-[0.3em]">{APP_LABEL[app]}</span>
       </button>
       <span aria-hidden="true" className="h-6 w-px bg-line" />
-      <span className="max-w-[220px] shrink-0 truncate font-display font-bold">{state.project.title}</span>
+      <span className="hidden max-w-[220px] shrink-0 truncate font-display font-bold sm:block">{state.project.title}</span>
       <nav aria-label="Brödsmulor" className="min-w-0 flex-1">
         <ol className="flex min-w-0 items-center gap-2.5 font-mono text-[0.72rem] uppercase tracking-[0.06em] text-muted">
           <li className="shrink-0">{viewLabel(state.view)}</li>
@@ -52,7 +52,7 @@ export function TopBar() {
           )}
         </ol>
       </nav>
-      <dl className="flex shrink-0 items-center gap-5 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted">
+      <dl className="hidden shrink-0 items-center gap-5 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted lg:flex">
         {stats.map((s) => (
           <div key={s.label} className="flex gap-2">
             <dt className="sr-only">{s.sr}</dt>
@@ -81,13 +81,13 @@ export function TopBar() {
         title={`Sparat lokalt i webbläsaren ${state.lastEdited}`}
       >
         <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
-        SPARAT
+        <span className="hidden sm:inline">SPARAT</span>
       </span>
       <button
         type="button"
         onClick={() => dispatch({ type: 'SET_PALETTE', open: true })}
         aria-label="Öppna kommandopalett (Ctrl+K)"
-        className="h-9 shrink-0 rounded-btn border border-line px-3 font-mono text-[0.68rem] text-muted transition-colors duration-150 hover:bg-raised hover:text-text"
+        className="hidden h-9 shrink-0 rounded-btn border border-line px-3 font-mono text-[0.68rem] text-muted transition-colors duration-150 hover:bg-raised hover:text-text md:block"
       >
         CTRL K
       </button>
