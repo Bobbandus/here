@@ -54,6 +54,19 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 /**
+ * Genererar tal utan att spela upp det och returnerar ljudkällan. Mobilklappan
+ * spelar sedan källan i ett ljudelement som låsts upp i användarens tryck — iOS
+ * Safari vägrar annars `play()` på ett nytt element efter en nätverksväntan.
+ */
+export async function synthesizeSpeech(text: string, language = 'en-US', timeoutMs = 6000): Promise<string> {
+  await withTimeout(loadPuter(), timeoutMs);
+  if (!window.puter) throw new Error('Puter.js är inte tillgängligt');
+  const audio = await withTimeout(window.puter.ai.txt2speech(text, language), timeoutMs);
+  if (!audio.src) throw new Error('Tom ljudkälla');
+  return audio.src;
+}
+
+/**
  * Läser upp text via Puter.js text-till-tal och väntar in att uppspelningen är klar.
  * Första gången någon på riktigt öppnar Puter kan de behöva godkänna en engångsruta
  * (deras eget samtycke för molntjänsten) — om ingen svarar inom nätverkstidsgränsen
