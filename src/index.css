@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Mörkt läge (standard) — RGB-tripplar för Tailwinds rgb(var(--x) / <alpha-value>)-mönster. */
+  --c-ink: 11 11 12;
+  --c-surface: 16 16 18;
+  --c-raised: 22 22 26;
+  --c-line: 38 38 44;
+  --c-text: 244 242 236;
+  --c-muted: 154 154 160;
+
+  --radius-btn: 3px;
+  --radius-media: 4px;
+  --radius-panel: 10px;
+
+  --glass-bg: rgba(255, 255, 255, 0.055);
+  --glass-bg-strong: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.13);
+  --glass-blur: saturate(170%) blur(18px);
+  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --card-shadow: none;
+
+  color-scheme: dark;
+
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Ljust läge — inspirerat av macOS ~2018–2022 (Big Sur/Monterey): ljusgrå fönsterbotten,
+ * vita kort, mjuka skuggor istället för hårda linjer, mer rundade hörn. Ingen Apple-grafik
+ * återanvänds, bara samma luftiga känsla.
+ */
+:root[data-theme='light'] {
+  --c-ink: 245 245 247;
+  --c-surface: 255 255 255;
+  --c-raised: 243 243 245;
+  --c-line: 226 226 230;
+  --c-text: 29 29 31;
+  --c-muted: 110 110 115;
+
+  --radius-btn: 8px;
+  --radius-media: 10px;
+  --radius-panel: 16px;
+
+  --glass-bg: rgba(0, 0, 0, 0.035);
+  --glass-bg-strong: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.045), 0 10px 26px rgba(0, 0, 0, 0.055);
+
+  color-scheme: light;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink font-body text-text antialiased;
+    font-size: 14px;
+    margin: 0;
+    overflow: hidden;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+  ::selection {
+    background: #3be389;
+    color: #05130c;
+  }
+  :focus-visible {
+    outline: 2px solid #3be389;
+    outline-offset: 3px;
+  }
+  button {
+    cursor: pointer;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--c-line)) transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0ms !important;
+      animation-duration: 0ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+@layer components {
+  .micro {
+    @apply font-mono text-[0.7rem] font-bold uppercase tracking-[0.14em];
+  }
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-hi), 0 18px 50px rgba(0, 0, 0, 0.45);
+  }
+  .glass-strong {
+    background: rgb(var(--c-surface) / 0.72);
+    background-image: linear-gradient(var(--glass-bg-strong), var(--glass-bg-strong));
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-hi), 0 18px 50px rgba(0, 0, 0, 0.28);
+  }
+  .btn-primary {
+    box-shadow: 4px 4px 0 rgba(59, 227, 137, 0.28);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .btn-primary:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 #3be389;
+  }
+  .field {
+    @apply h-10 w-full rounded-btn border border-line bg-raised px-3.5 text-[13.5px] text-text outline-none transition-colors duration-150 placeholder:text-muted hover:border-accent/40 focus:border-accent;
+  }
+  select.field {
+    @apply pr-7;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, rgb(var(--c-muted)) 50%),
+      linear-gradient(135deg, rgb(var(--c-muted)) 50%, transparent 50%);
+    background-position: calc(100% - 13px) 50%, calc(100% - 9px) 50%;
+    background-size: 4px 4px;
+    background-repeat: no-repeat;
+  }
+  /* Kort med mjuk skugga i ljust läge, ingen skugga i mörkt läge. */
+  .card {
+    @apply rounded-panel border border-line bg-surface;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 200ms ease, background-color 200ms ease, border-color 200ms ease;
+  }
+}
+
+/* ------------------------------------------------------------------------ */
+/* Manussida (Courier Prime). Den enda ljusa ytan i mörkt läge, alltid samma. */
+
+.sp-page {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #181818;
+}
+.sp-line {
+  position: relative;
+  min-height: 24px;
+}
+.sp-scene_heading {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 24px;
+}
+.sp-page > .sp-line:first-child {
+  margin-top: 0;
+}
+.sp-scene-no {
+  position: absolute;
+  left: -52px;
+  top: 0;
+  width: 40px;
+  text-align: right;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #8a8a80;
+  user-select: none;
+}
+.sp-character {
+  padding-left: 220px;
+  text-transform: uppercase;
+}
+.sp-parenthetical {
+  margin-left: 180px;
+  max-width: 220px;
+  font-style: italic;
+}
+.sp-dialogue {
+  margin-left: 130px;
+  max-width: 330px;
+}
+.sp-transition {
+  text-align: right;
+  text-transform: uppercase;
+}
+.sp-centered {
+  text-align: center;
+}
+.sp-note {
+  background: rgba(255, 206, 63, 0.18);
+  color: #6b5400;
+}
+.sp-section {
+  font-weight: 700;
+  color: #8a8a80;
+  font-size: 13px;
+}
+.sp-synopsis {
+  font-style: italic;
+  color: #6f6f66;
+}
+.sp-mark {
+  color: rgba(24, 24, 24, 0.32);
+}
+.sp-sel {
+  background: rgba(59, 227, 137, 0.38);
+}
+.sp-caret {
+  border-left: 2px solid #181818;
+  margin-left: -1px;
+  margin-right: -1px;
+  animation: sp-blink 1.06s steps(1) infinite;
+}
+.sp-caret.is-idle {
+  border-left-color: transparent;
+  animation: none;
+}
+@keyframes sp-blink {
+  50% {
+    border-left-color: transparent;
+  }
+}
+.sp-active-scene {
+  box-shadow: -14px 0 0 -12px #3be389;
+}
