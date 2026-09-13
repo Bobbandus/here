@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useApp } from './state/AppState';
+import { useMediaQuery } from './components/ui/useMediaQuery';
 import { Sidebar } from './components/shell/Sidebar';
 import { TopBar } from './components/shell/TopBar';
 import { StatusBar } from './components/shell/StatusBar';
@@ -13,6 +14,7 @@ import { WriteOverview } from './components/dashboard/WriteOverview';
 import { PlanOverview } from './components/dashboard/PlanOverview';
 import { WriteView } from './components/editor/WriteView';
 import { ScriptEditor } from './components/editor/ScriptEditor';
+import { MobileWriteView } from './components/editor/MobileWriteView';
 import { SceneView } from './components/scene/SceneView';
 import { ShotlistView } from './components/plan/ShotlistView';
 import { ShootDaysView } from './components/plan/ShootDaysView';
@@ -26,6 +28,11 @@ export default function App() {
   const inApp = state.app !== 'home' && state.hasProject;
   const focusActive = inApp && state.view === 'write' && state.focusMode;
   const shootImmersive = inApp && state.view === 'shoot';
+  // Under ~700 px är den formaterade desktop-sidan (fast 780 px-bredd,
+  // tecken-/dialogindrag i pixlar) inte en rimlig editor — hela skalet (sidebar,
+  // toppbar) hoppas då över till förmån för en egen, enkel mobilvy, inte en
+  // förminskad desktopversion. Se `MobileWriteView.tsx`.
+  const isNarrowWrite = useMediaQuery('(max-width: 700px)') && inApp && state.view === 'write' && !state.focusMode;
   const anyModalOpen = state.paletteOpen || state.newProjectOpen || state.settingsOpen || state.ai !== null;
 
   useEffect(() => {
@@ -63,6 +70,8 @@ export default function App() {
         <ScriptEditor key={state.project.id} minimal />
       ) : shootImmersive ? (
         <ClapperboardView />
+      ) : isNarrowWrite ? (
+        <MobileWriteView />
       ) : inApp ? (
         <>
           <Sidebar />

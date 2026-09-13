@@ -96,7 +96,6 @@ export function ScriptEditor({ minimal = false }: ScriptEditorProps) {
   const [acPos, setAcPos] = useState<{ top: number; left: number; visible: boolean }>({ top: 0, left: 0, visible: false });
   const [scrollTick, setScrollTick] = useState(0);
   const [layerHeight, setLayerHeight] = useState(0);
-  const [viewportWidth, setViewportWidth] = useState<number | null>(null);
 
   const pendingSel = useRef<Sel | null>(null);
   const goalX = useRef<number | null>(null);
@@ -295,21 +294,6 @@ export function ScriptEditor({ minimal = false }: ScriptEditorProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lines]);
-
-  // -------------------------------------------------------------------------
-  // Smal skärm: sidan (fast PAGE_WIDTH px, för radbrytningsmatte/karaktärsindrag)
-  // skalas ner så den får plats i bredd istället för att bara skrollas horisontellt.
-
-  useEffect(() => {
-    const sc = scrollRef.current;
-    if (!sc || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver((entries) => {
-      const w = entries[0]?.contentRect.width;
-      if (w) setViewportWidth((prev) => (prev === w ? prev : w));
-    });
-    ro.observe(sc);
-    return () => ro.disconnect();
-  }, []);
 
   // -------------------------------------------------------------------------
   // Positionering: markör, osynlig textarea, förslagslista
@@ -701,9 +685,7 @@ export function ScriptEditor({ minimal = false }: ScriptEditorProps) {
   }, [derived.scenes]);
 
   const pageBreakCount = pageBreaks ? Math.floor(Math.max(0, layerHeight - 1) / (ROWS_PER_PAGE * LINE_H)) : 0;
-  const fitsWithoutScroll = viewportWidth !== null && viewportWidth >= PAGE_WIDTH + 48;
-  const autoFitScale = viewportWidth ? Math.max(0.32, Math.min(1, (viewportWidth - 24) / PAGE_WIDTH)) : 1;
-  const scale = fitsWithoutScroll || viewportWidth === null ? zoom / 100 : autoFitScale;
+  const scale = zoom / 100;
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -737,26 +719,22 @@ export function ScriptEditor({ minimal = false }: ScriptEditorProps) {
               ))}
             </select>
           </label>
-          {fitsWithoutScroll ? (
-            <div role="group" aria-label="Zoom" className="hidden items-center gap-1.5 sm:flex">
-              <MonoLabel tone="muted" className="mr-1">
-                Zoom
-              </MonoLabel>
-              {([90, 100, 110] as Zoom[]).map((z) => (
-                <button
-                  key={z}
-                  type="button"
-                  aria-pressed={zoom === z}
-                  onClick={() => dispatch({ type: 'SET_ZOOM', zoom: z })}
-                  className={`h-8 rounded-btn px-2.5 transition-colors duration-150 ${zoom === z ? 'bg-raised text-accent' : 'hover:bg-raised hover:text-text'}`}
-                >
-                  {z}%
-                </button>
-              ))}
-            </div>
-          ) : (
-            <span className="micro text-muted">Anpassad {Math.round(scale * 100)}%</span>
-          )}
+          <div role="group" aria-label="Zoom" className="hidden items-center gap-1.5 sm:flex">
+            <MonoLabel tone="muted" className="mr-1">
+              Zoom
+            </MonoLabel>
+            {([90, 100, 110] as Zoom[]).map((z) => (
+              <button
+                key={z}
+                type="button"
+                aria-pressed={zoom === z}
+                onClick={() => dispatch({ type: 'SET_ZOOM', zoom: z })}
+                className={`h-8 rounded-btn px-2.5 transition-colors duration-150 ${zoom === z ? 'bg-raised text-accent' : 'hover:bg-raised hover:text-text'}`}
+              >
+                {z}%
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             aria-pressed={pageBreaks}
