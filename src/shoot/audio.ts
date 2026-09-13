@@ -14,7 +14,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   });
 }
 
-function playFile(src: string, timeoutMs = 4000): Promise<void> {
+function playFile(src: string, timeoutMs = 8000): Promise<void> {
   return withTimeout(
     new Promise<void>((resolve, reject) => {
       const audio = new Audio(src);

@@ -56,19 +56,23 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 /**
  * Läser upp text via Puter.js text-till-tal och väntar in att uppspelningen är klar.
  * Första gången någon på riktigt öppnar Puter kan de behöva godkänna en engångsruta
- * (deras eget samtycke för molntjänsten) — om ingen svarar inom tidsgränsen ger det
- * bara upp istället för att låta hela klappsekvensen hänga sig på obestämd tid.
+ * (deras eget samtycke för molntjänsten) — om ingen svarar inom nätverkstidsgränsen
+ * ger det bara upp istället för att låta hela klappsekvensen hänga sig på obestämd
+ * tid. Själva uppspelningen har en egen, mycket längre tidsgräns — annars klipptes
+ * längre meningar (datum + tid + scen + tagning) av mitt i och klappet kom innan
+ * rösten hunnit tala klart, eftersom den korta nätverkstidsgränsen tidigare också
+ * användes för att vänta in uppspelningens `onended`.
  */
-export async function speak(text: string, language = 'en-US', timeoutMs = 5000): Promise<void> {
-  await withTimeout(loadPuter(), timeoutMs);
+export async function speak(text: string, language = 'en-US', networkTimeoutMs = 5000, playbackTimeoutMs = 20000): Promise<void> {
+  await withTimeout(loadPuter(), networkTimeoutMs);
   if (!window.puter) throw new Error('Puter.js är inte tillgängligt');
-  const audio = await withTimeout(window.puter.ai.txt2speech(text, language), timeoutMs);
+  const audio = await withTimeout(window.puter.ai.txt2speech(text, language), networkTimeoutMs);
   await withTimeout(
     new Promise<void>((resolve, reject) => {
       audio.onended = () => resolve();
       audio.onerror = () => reject(new Error('Uppspelning misslyckades'));
       audio.play().catch(reject);
     }),
-    timeoutMs,
+    playbackTimeoutMs,
   );
 }
